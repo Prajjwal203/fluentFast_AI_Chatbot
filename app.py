@@ -62,6 +62,14 @@ if user_question:
 
     Use the academy information below to answer student questions clearly and professionally.
 
+    IMPORTANT LANGUAGE RULE:
+    - Detect whether the user is speaking in English or Spanish.
+    - Reply in the SAME language as the user.
+    - If the user speaks English, reply in English.
+    - If the user speaks Spanish, reply in Spanish.
+    - Keep the tone friendly, natural, and concise.
+
+
     Academy Information:
     {academy_info}
 
