@@ -21,9 +21,60 @@ with open("academy_info.txt", "r", encoding="utf-8") as file:
     academy_info = file.read()
 
 # ---------- TITLE ----------
+# st.title("🎓 Fluent Fast Academy AI Assistant")
+
+# st.write("Ask questions about Spanish courses, fees, timings, DELE preparation, and counseling.")
+
+# ---------- HEADER ----------
 st.title("🎓 Fluent Fast Academy AI Assistant")
 
-st.write("Ask questions about Spanish courses, fees, timings, DELE preparation, and counseling.")
+st.markdown("""
+Your bilingual AI assistant for Spanish courses, DELE preparation, fees, timings, and counseling.
+""")
+st.markdown("""
+### 🇪🇸 Learn Spanish With Confidence
+
+Ask questions about:
+- Courses
+- Fees
+- Timings
+- DELE Preparation
+- Online Classes
+- Certifications
+""")
+
+# ---------- SIDEBAR ----------
+with st.sidebar:
+
+    st.header("📚 About Academy")
+
+    st.write("""
+    Fluent Fast Academy offers:
+    - Spanish courses A1 to C2
+    - Online & Offline classes
+    - DELE preparation
+    - Flexible batches
+    - Certification after each level
+    """)
+
+    st.divider()
+
+    st.subheader("📞 Contact")
+
+    st.write("🌐 www.fluentfastacademy.com")
+    st.write("📱 +91-7834806482")
+
+    st.divider()
+
+    st.subheader("💡 Try Asking")
+
+    st.write("""
+    - What are the B1 fees?
+    - Do you provide online classes?
+    - ¿Ofrecen preparación DELE?
+    """)
+
+
 
 # ---------- CHAT HISTORY ----------
 if "messages" not in st.session_state:
@@ -35,7 +86,36 @@ for message in st.session_state.messages:
         st.markdown(message["content"])
 
 # ---------- CHAT INPUT ----------
+# user_question = st.chat_input("Ask your question here...")
+
+# ---------- QUICK QUESTION BUTTONS ----------
+
+st.subheader("⚡ Quick Questions")
+
+col1, col2, col3 = st.columns(3)
+
+quick_question = None
+
+with col1:
+    if st.button("💰 Course Fees"):
+        quick_question = "What are the fees for Spanish courses?"
+
+with col2:
+    if st.button("🖥 Online Classes"):
+        quick_question = "Do you provide online classes?"
+
+with col3:
+    if st.button("📘 DELE Prep"):
+        quick_question = "Do you provide DELE preparation?"
+
+# ---------- CHAT INPUT ----------
 user_question = st.chat_input("Ask your question here...")
+
+# Use button question if clicked
+if quick_question:
+    user_question = quick_question
+
+
 
 # ---------- WHEN USER SENDS MESSAGE ----------
 if user_question:
