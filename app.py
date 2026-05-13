@@ -1,5 +1,7 @@
 import streamlit as st
 from groq import Groq
+import csv
+import os
 
 # ---------- PAGE CONFIG ----------
 st.set_page_config(
@@ -105,5 +107,45 @@ if user_question:
         }
     )
 
+# ---------- LEAD CAPTURE SECTION ----------
 
+st.divider()
+
+st.subheader("📞 Get Free Counseling")
+
+st.write("Interested in joining? Leave your details below.")
+
+name = st.text_input("Your Name")
+
+email = st.text_input("Your Email")
+
+course = st.selectbox(
+    "Interested Course",
+    [
+        "Spanish A1",
+        "Spanish A2",
+        "Spanish B1",
+        "Spanish B2",
+        "Spanish C1",
+        "DELE Preparation",
+        "Other"
+    ]
+)
+
+if st.button("Submit Details"):
+
+    file_exists = os.path.isfile("leads.csv")
+
+    with open("leads.csv", "a", newline="", encoding="utf-8") as file:
+
+        writer = csv.writer(file)
+
+        # Add header if file empty
+        if not file_exists or os.stat("leads.csv").st_size == 0:
+            writer.writerow(["Name", "Email", "Course"])
+
+        # Add lead data
+        writer.writerow([name, email, course])
+
+    st.success("✅ Your details have been submitted successfully!")
    
