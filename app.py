@@ -2,6 +2,7 @@ import streamlit as st
 from groq import Groq
 import csv
 import os
+from pypdf import PdfReader
 
 # ---------- PAGE CONFIG ----------
 st.set_page_config(
@@ -17,8 +18,38 @@ client = Groq(
 
 
 # ---------- LOAD ACADEMY INFO ----------
-with open("academy_info.txt", "r", encoding="utf-8") as file:
-    academy_info = file.read()
+# with open("academy_info.txt", "r", encoding="utf-8") as file:
+#     academy_info = file.read()
+
+# ---------- PDF UPLOAD ----------
+
+uploaded_file = st.sidebar.file_uploader(
+    "📄 Upload Academy Brochure PDF",
+    type="pdf"
+)
+
+academy_info = ""
+
+if uploaded_file is not None:
+
+    pdf_reader = PdfReader(uploaded_file)
+
+    for page in pdf_reader.pages:
+        academy_info += page.extract_text()
+        
+    st.sidebar.success("📘 PDF Uploaded Successfully")
+
+else:
+
+    academy_info = """
+    Fluent Fast Academy offers Spanish language courses,
+    DELE preparation, online and offline classes,
+    certification, and counseling support.
+    """
+
+# if uploaded_file:
+#     st.sidebar.success("📘 PDF Uploaded Successfully")
+
 
 # ---------- TITLE ----------
 # st.title("🎓 Fluent Fast Academy AI Assistant")
@@ -46,6 +77,7 @@ Ask questions about:
 # ---------- SIDEBAR ----------
 with st.sidebar:
 
+    st.success("✅ AI Assistant Ready") # line added here
     st.header("📚 About Academy")
 
     st.write("""
