@@ -3,6 +3,8 @@ from groq import Groq
 import csv
 import os
 from pypdf import PdfReader
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
 # ---------- PAGE CONFIG ----------
 st.set_page_config(
@@ -15,6 +17,23 @@ st.set_page_config(
 client = Groq(
     api_key=st.secrets["GROQ_API_KEY"]
 )
+
+
+# ---------- GOOGLE SHEETS SETUP ----------
+
+scope = [
+    "https://spreadsheets.google.com/feeds",
+    "https://www.googleapis.com/auth/drive"
+]
+
+creds = ServiceAccountCredentials.from_json_keyfile_name(
+    "service_account.json",
+    scope
+)
+
+client_sheet = gspread.authorize(creds)
+
+sheet = client_sheet.open("FluentFastLeads").sheet1
 
 
 # ---------- LOAD ACADEMY INFO ----------
@@ -36,7 +55,7 @@ if uploaded_file is not None:
 
     for page in pdf_reader.pages:
         academy_info += page.extract_text()
-        
+
     st.sidebar.success("📘 PDF Uploaded Successfully")
 
 else:
@@ -248,16 +267,20 @@ if st.button("Submit Details"):
 
     file_exists = os.path.isfile("leads.csv")
 
-    with open("leads.csv", "a", newline="", encoding="utf-8") as file:
-
-        writer = csv.writer(file)
-
-        # Add header if file empty
-        if not file_exists or os.stat("leads.csv").st_size == 0:
-            writer.writerow(["Name", "Email", "Course"])
-
-        # Add lead data
-        writer.writerow([name, email, course])
+    sheet.append_row([name, email, course])
 
     st.success("✅ Your details have been submitted successfully!")
+
+    # with open("leads.csv", "a", newline="", encoding="utf-8") as file:
+
+    #     writer = csv.writer(file)
+
+    #     # Add header if file empty
+    #     if not file_exists or os.stat("leads.csv").st_size == 0:
+    #         writer.writerow(["Name", "Email", "Course"])
+
+    #     # Add lead data
+    #     writer.writerow([name, email, course])
+
+    # st.success("✅ Your details have been submitted successfully!")
    
