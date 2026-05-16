@@ -1,2 +1,6 @@
-openai
 streamlit
+groq
+pypdf
+gspread
+oauth2client
+google-auth
